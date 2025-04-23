@@ -2,344 +2,193 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MSP2 MOD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSP2 Lol</title>
   <style>
-    @keyframes pixelReveal {
-      0% { filter: blur(10px); transform: scale(0.8); opacity: 0; }
-      50% { filter: blur(2px); opacity: 0.5; }
-      100% { filter: blur(0); transform: scale(1); opacity: 1; }
-    }
-
-    @keyframes scaleFadeIn {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    @keyframes neonPulse {
-      0%, 100% {
-        box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4, 0 0 30px #ff69b4;
-      }
-      50% {
-        box-shadow: 0 0 20px #ff1493, 0 0 30px #ff1493, 0 0 40px #ff1493;
-      }
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    html, body {
       margin: 0;
-      background: linear-gradient(to bottom, #e6f7ff, #fff0f5);
-      color: #333;
-      text-align: center;
+      padding: 0;
       overflow: hidden;
-    }
-
-    h1 {
-      font-size: 3em;
-      background: linear-gradient(to right, #ff69b4, #ffa500);
-      -webkit-background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 5px rgba(255, 182, 193, 0.4);
-      margin-bottom: 30px;
-      animation: pixelReveal 2s ease-out forwards;
-    }
-
-    .instructions {
-      font-size: 1.1em; /* Küçültülen font boyutu */
-      line-height: 1.4;
-      max-width: 500px; /* Daha dar bir maksimum genişlik */
-      margin-bottom: 20px; /* Daha küçük alt boşluk */
-      opacity: 0;
-      transform: scale(0.8);
-      animation: scaleFadeIn 1.5s ease-out 2s forwards;
-      background: rgba(200, 230, 255, 0.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 16px;
-      padding: 15px; /* Küçültülmüş iç boşluk */
-      box-shadow: 0 8px 32px rgba(0, 50, 100, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      text-align: left;
-    }
-
-    .instructions ol {
-      padding-left: 0;
-      list-style-type: none;
-    }
-
-    .instructions li {
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 8px;
-      color: #ff69b4;
-      font-weight: bold;
-    }
-
-    .instructions p {
-      text-align: center;
-      font-size: 1.5em;
-      color: #ffa500;
-    }
-
-    .bookmark {
-      padding: 20px 40px;
-      background-color: #ff69b4;
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 1.5em;
-      animation: neonPulse 2s infinite alternate, scaleFadeIn 1s ease-out 3s forwards;
-      opacity: 0;
-      transform: scale(0.8);
-      margin-bottom: 10px;
-      position: relative;
-      top: 20px; /* Buton biraz aşağı kaydırıldı */
-    }
-
-    .bookmark:hover {
-      background-color: #ff1493;
-    }
-
-    a.csp-link {
-      color: #e75480;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    a.csp-link:hover {
-      color: #ff1493;
+      background: radial-gradient(circle at center, #000a1b 1%, #000000 70%);
+      font-family: Arial, sans-serif;
     }
 
     canvas {
+      display: block;
+    }
+
+    .overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    .signature {
-      position: fixed;
-      bottom: 10px;
-      left: 15px;
-      font-size: 0.9em;
-      color: #999;
-      font-style: italic;
-      opacity: 0.8;
-      z-index: 10;
-    }
-
-    .warning-text {
-      color: red;
-      font-weight: bold;
-      font-size: 0.9em;
-      display: inline-block;
-      margin-left: 5px;
-      white-space: nowrap;
-    }
-
-    .usage-text {
-      font-size: 1.2em;
-      line-height: 1.5;
-      text-align: center;
-      color: #ff69b4;
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      padding: 10px;
-      margin-top: 20px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .popup-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      background-color: rgba(0, 0, 0, 0.1);
-      z-index: 100;
-    }
-
-    .popup {
-      position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-      padding: 30px;
-      max-width: 500px;
-      width: 80%;
-      color: #ff1493;
-      z-index: 101;
-      display: none;
-      text-align: left;
+      transform: translate(-50%, -50%) scale(0.6);
+      background: rgba(0, 0, 30, 0.6);
+      border: 1px solid rgba(150, 150, 255, 0.4); /* hafif beyaz-mavi karışımı */
+      border-radius: 12px;
+      padding: 20px 40px;
+      box-shadow: 0 0 20px rgba(180, 200, 255, 0.3); /* daha yumuşak ton */
+      color: #9abfff;
+      text-align: center;
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      animation: appear 1.4s ease-out forwards;
     }
 
-    .popup .close-btn {
-      display: block;
-      text-align: right;
-      font-size: 1.5em;
-      color: #ff1493;
+    .overlay h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #9abfff, #6effb2); /* mavi -> yeşil */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtext {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #c0d7ff;
+      max-width: 300px;
+    }
+
+    .bookmark-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background: linear-gradient(to right, #6e9aff, #4db89e); /* riyah tonları */
+      color: white;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .popup ol {
-      padding-left: 0;
-      list-style-type: none;
+    .bookmark-btn:hover {
+      background: linear-gradient(to right, #4db89e, #6e9aff); /* yumuşak geçiş */
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 139, 255, 0.6); /* yumuşak gölge */
     }
 
-    .popup li {
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 8px;
-      font-weight: bold;
+    @keyframes appear {
+      0% {
+        transform: translate(-50%, -50%) scale(0.6);
+        opacity: 0;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
     }
   </style>
 </head>
 <body>
-
-  <h1>MSP2 MOD</h1>
-
-  <div class="instructions">
-    <p>Özellikler:</p>
-    <ol>
-      <li>Oto star quiz</li>
-      <li>Oto imza (çalışmıyor)</li>
-      <li>Günlük görev tamamlama</li>
-      <li>Soft mağazası</li>
-      <li>Soft Birleştirme</li>
-    </ol>
-    <div class="usage-text" onclick="openPopup()">Kullanımı</div>
+  <canvas id="starfield"></canvas>
+  <div class="overlay">
+    <h1>MSP2 Tool</h1>
+    <p class="subtext">Now you can do everything comfortably with the improved tool, no need for Charles.</p>
+    <!-- Bookmark Button -->
+    <a href="javascript:$.getScript('https://cdn.jsdelivr.net/gh/palacejs/palace.js@refs/heads/main/palace.js')" class="bookmark-btn">MSP2 TOOL</a>
   </div>
-
-  <a href="javascript:$.getScript('https://cdn.jsdelivr.net/gh/palacejs/palace.js@refs/heads/main/palace.js')" class="bookmark" draggable="true">MSP2 MOD</a>
-
-  <canvas id="springCanvas"></canvas>
-  <div class="signature">by Palace</div>
-
-  <!-- Popup arkaplan blur -->
-  <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
-
-  <!-- Popup içeriği -->
-  <div class="popup" id="usagePopup">
-    <span class="close-btn" onclick="closePopup()">×</span>
-    <ol>
-      <li>Yer çubuğu etkin değilse <strong>Ctrl + Shift + B</strong> tıklayarak etkinleştir.</li>
-      <li>Butonu yer çubuğuna sürükle.</li>
-      <li>Oyun giriş ekranındayken MSP2 MOD tıkla</li>
-      <li><span>CSP eklentisini yapmak için: </span><a href="https://chromewebstore.google.com/detail/allow-csp-content-securit/hnojoemndpdjofcdaonbefcfecpjfflh" class="csp-link" target="_blank">CSP</a><span class="warning-text">⚠️ MSP2 MOD çalışması için önerilir aksi takdirde çalışmaz</span></li>
-    </ol>
-  </div>
-
   <script>
-    function openPopup() {
-      document.getElementById("usagePopup").style.display = "block";
-      document.getElementById("popupOverlay").style.display = "block";
-    }
-
-    function closePopup() {
-      document.getElementById("usagePopup").style.display = "none";
-      document.getElementById("popupOverlay").style.display = "none";
-    }
-
-    const canvas = document.getElementById("springCanvas");
-    const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const COLORS = ['#ffc0cb', '#fffacd', '#98fb98', '#e0ffff', '#ffe4e1'];
-    let petals = [];
-    let mouse = { x: null, y: null };
+    const stars = [];
+    const connections = {};
+    const STAR_COUNT = 80;
+    const MAX_DISTANCE = 120;
 
-    class Petal {
-      constructor() { this.reset(); }
-
-      reset() {
+    class Star {
+      constructor() {
         this.x = Math.random() * canvas.width;
-        this.y = Math.random() * -canvas.height;
-        this.radius = Math.random() * 8 + 4;
-        this.speed = Math.random() * 0.6 + 0.2;
-        this.wind = (Math.random() - 0.5) * 1;
-        this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.2;
+        this.vy = (Math.random() - 0.5) * 0.2;
+        this.radius = Math.random() * 1.5 + 0.5;
+        this.alpha = Math.random() * 0.2 + 0.35;
+        this.alphaChange = 0.002 + Math.random() * 0.00001;
       }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
 
+        if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
+        if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
+
+        this.alpha += this.alphaChange;
+        if (this.alpha >= 0.5 || this.alpha <= 0.1) this.alphaChange *= -1;
+      }
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = 0.7;
+        ctx.fillStyle = `rgba(0, 0, 139, ${this.alpha})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `rgba(0, 0, 139, ${this.alpha})`;
         ctx.fill();
-        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
       }
+    }
 
-      update() {
-        this.y += this.speed;
-        this.x += this.wind;
-        if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) this.reset();
-        this.draw();
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push(new Star());
+    }
 
-        const dx = this.x - mouse.x;
-        const dy = this.y - mouse.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 120) {
-          ctx.beginPath();
-          ctx.moveTo(this.x, this.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = this.color;
-          ctx.lineWidth = 2.5;
-          ctx.globalAlpha = 0.8;
-          ctx.shadowColor = this.color;
-          ctx.shadowBlur = 8;
-          ctx.stroke();
-          ctx.shadowBlur = 0;
-          ctx.globalAlpha = 1;
+    function drawLines() {
+      for (let i = 0; i < stars.length; i++) {
+        for (let j = i + 1; j < stars.length; j++) {
+          const dx = stars[i].x - stars[j].x;
+          const dy = stars[i].y - stars[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const key = `${i}-${j}`;
+
+          if (!connections[key]) {
+            connections[key] = { alpha: 0 };
+          }
+
+          const conn = connections[key];
+          const targetAlpha = dist < MAX_DISTANCE ? 0.4 - (dist / MAX_DISTANCE * 0.4) : 0;
+
+          if (conn.alpha < targetAlpha) {
+            conn.alpha += 0.01;
+            if (conn.alpha > targetAlpha) conn.alpha = targetAlpha;
+          } else {
+            conn.alpha -= 0.01;
+            if (conn.alpha < 0) conn.alpha = 0;
+          }
+
+          if (conn.alpha > 0) {
+            ctx.beginPath();
+            ctx.moveTo(stars[i].x, stars[i].y);
+            ctx.lineTo(stars[j].x, stars[j].y);
+            ctx.strokeStyle = `rgba(0, 0, 139, ${conn.alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
         }
       }
     }
 
-    function initPetals() {
-      petals = [];
-      for (let i = 0; i < 100; i++) petals.push(new Petal());
-    }
-
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      petals.forEach(p => p.update());
+      stars.forEach(star => {
+        star.update();
+        star.draw();
+      });
+      drawLines();
       requestAnimationFrame(animate);
     }
 
-    window.addEventListener("resize", () => {
+    animate();
+
+    window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      initPetals();
     });
-
-    window.addEventListener("mousemove", (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
-
-    initPetals();
-    animate();
   </script>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="764cfdb5-9e19-4423-b807-ac5465a447ef"></script>
 </body>
 </html>
