@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MSP2 MOD</title>
+  <title>Animated Starfield</title>
   <style>
     html, body {
       margin: 0;
@@ -89,7 +89,7 @@
     <h1>MSP2 Tool</h1>
     <p class="subtext">Now you can do everything comfortably with the improved tool, no need for Charles.</p>
     <!-- Bookmark Button -->
-    <a href="javascript:$.getScript('https://cdn.jsdelivr.net/gh/palacejs/palace.js@refs/heads/main/palace.js')" class="bookmark-btn">MSP2 TOOL</a>
+    <a href="javascript:$.getScript('https://cdn.jsdelivr.net/gh/palacejs/msp@refs/heads/main/msp2mod.js')" class="bookmark-btn">MSP2 TOOL</a>
   </div>
   <script>
     const canvas = document.getElementById('starfield');
@@ -106,12 +106,12 @@
     class Star {
       constructor() {
         this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.2;
-        this.vy = (Math.random() - 0.5) * 0.2;
-        this.radius = Math.random() * 1.5 + 0.5;
-        this.alpha = Math.random() * 0.2 + 0.35;
-        this.alphaChange = 0.002 + Math.random() * 0.00001;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.2;
+    this.vy = (Math.random() - 0.5) * 0.2;
+    this.radius = Math.random() * 1 + 1; // Boyut arttı
+    this.alpha = Math.random() * 0.5 + 0.5; // Daha görünür alpha
+    this.alphaChange = 0.003 + Math.random() * 0.00002;
       }
       update() {
         this.x += this.vx;
