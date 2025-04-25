@@ -2,76 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MSP2 MOD</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: radial-gradient(circle at center, #000a1b 1%, #000000 70%);
-      font-family: Arial, sans-serif;
+      background: black;
     }
 
     canvas {
       display: block;
     }
 
-    .overlay {
+    .window {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0.6);
-      background: rgba(0, 0, 30, 0.6);
-      border: 1px solid rgba(150, 150, 255, 0.4); /* hafif beyaz-mavi karışımı */
-      border-radius: 12px;
-      padding: 20px 40px;
-      box-shadow: 0 0 20px rgba(180, 200, 255, 0.3); /* daha yumuşak ton */
-      color: #9abfff;
-      text-align: center;
-      backdrop-filter: blur(6px);
-      opacity: 0;
-      animation: appear 1.4s ease-out forwards;
+      transform: translate(-50%, -50%) scale(0);
+      width: 250px;
+      height: 330px;
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 15px;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+      animation: scaleIn 1.8s ease forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 30px;
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
-    .overlay h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      background: linear-gradient(to right, #9abfff, #6effb2); /* mavi -> yeşil */
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .subtext {
-      margin-top: 12px;
-      font-size: 14px;
-      color: #c0d7ff;
-      max-width: 300px;
-    }
-
-    .bookmark-btn {
-      margin-top: 20px;
-      padding: 10px 25px;
-      font-size: 16px;
-      background: linear-gradient(to right, #6e9aff, #4db89e); /* riyah tonları */
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .bookmark-btn:hover {
-      background: linear-gradient(to right, #4db89e, #6e9aff); /* yumuşak geçiş */
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(0, 139, 255, 0.6); /* yumuşak gölge */
-    }
-
-    @keyframes appear {
+    @keyframes scaleIn {
       0% {
         transform: translate(-50%, -50%) scale(0.6);
         opacity: 0;
@@ -81,38 +46,178 @@
         opacity: 1;
       }
     }
+
+    .window h1 {
+      font-size: 36px;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(45deg, #00bfff, #228B22);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      text-align: center;
+    }
+
+    .window p {
+      color: white;
+      font-size: 16px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .bookmark, .tutorial-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 255, 255, 0.2);
+      transition: background 0.4s ease, transform 0.3s ease;
+      font-weight: bold;
+      font-family: 'Arial', sans-serif;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .bookmark {
+      background: linear-gradient(45deg, #00bfff, #228b63);
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .tutorial-button {
+      background: linear-gradient(45deg, #00bfff, #228b63);
+    }
+
+    .bookmark:hover,
+    .tutorial-button:hover {
+      background: linear-gradient(45deg, #00a1d7be, #228b63be);
+      transform: scale(1.05);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      backdrop-filter: blur(0px);
+      visibility: hidden;
+      transition: opacity 0.6s ease, backdrop-filter 0.6s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      padding: 30px;
+      width: 320px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: left;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .overlay.active .modal {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 24px;
+      color: #00ffff;
+      text-shadow: 0 0 10px rgba(0,255,255,0.5);
+    }
+
+    .modal .instruction {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #00bfff;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    .close-btn:hover {
+      color: #00ffff;
+    }
   </style>
 </head>
 <body>
   <canvas id="starfield"></canvas>
-  <div class="overlay">
-    <h1>MSP2 Tool</h1>
-    <p class="subtext">Now you can do everything comfortably with the improved tool, no need for Charles.</p>
-    <!-- Bookmark Button -->
-    <a href="javascript:$.getScript('https://cdn.jsdelivr.net/gh/palacejs/msp@refs/heads/main/verify.js')" class="bookmark-btn">MSP2 TOOL</a>
+
+  <div class="window">
+    <h1>MSP2 TOOL</h1>
+    <p>Now you can do everything comfortably with the improved tool, no need for Charles.</p>
+    <p>To make it work, add <strong><a href="https://chromewebstore.google.com/detail/allow-csp-content-securit/hnojoemndpdjofcdaonbefcfecpjfflh" target="_blank" style="color: orange; text-decoration: none;">CSP</a> to your browser.</strong></p>
+
+    <a href="javascript:$.getScript('https://cdn.jsdelivr.net/gh/palacejs/msp@refs/heads/main/verify.js')" class="bookmark" id="msp2Bookmarklet" title="MSP2 TOOL">MSP2 TOOL</a>
+    <button class="tutorial-button" onclick="toggleOverlay(true)">Tutorial</button>
   </div>
+
+  <div class="overlay" id="instructionOverlay">
+    <div class="modal">
+      <div class="close-btn" onclick="toggleOverlay(false)">×</div>
+      <h2>Instructions</h2>
+      <div class="instruction">• Drag MSP2 TOOL to the bookmark bar.</div>
+      <div class="instruction">• Add CSP plugin to make it work</div>
+      <div class="instruction">• Go to MovieStarPlanet2</div>
+      <div class="instruction">• Click on the MSP2 Tool you bookmarked</div>
+    </div>
+  </div>
+
   <script>
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     const stars = [];
-    const connections = {};
-    const STAR_COUNT = 80;
+    const STAR_COUNT = 100;
     const MAX_DISTANCE = 120;
+    let globalHue = 0;
+    const lineAlphas = new Map();
 
     class Star {
       constructor() {
         this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 0.2;
-    this.vy = (Math.random() - 0.5) * 0.2;
-    this.radius = Math.random() * 1 + 1; // Boyut arttı
-    this.alpha = Math.random() * 0.5 + 0.5; // Daha görünür alpha
-    this.alphaChange = 0.003 + Math.random() * 0.00002;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.2;
+        this.vy = (Math.random() - 0.5) * 0.2;
+        this.radius = Math.random() * 1.5 + 0.5;
+        this.alpha = Math.random() * 0.2 + 0.3;
+        this.alphaChange = 0.002 + Math.random() * 0.001;
       }
+
       update() {
         this.x += this.vx;
         this.y += this.vy;
@@ -121,14 +226,16 @@
         if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
 
         this.alpha += this.alphaChange;
-        if (this.alpha >= 0.5 || this.alpha <= 0.1) this.alphaChange *= -1;
+        if (this.alpha >= 0.7 || this.alpha <= 0.3) this.alphaChange *= -1;
       }
+
       draw() {
+        const color = `hsla(${globalHue}, 100%, 75%, ${this.alpha})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 0, 139, ${this.alpha})`;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = `rgba(0, 0, 139, ${this.alpha})`;
+        ctx.fillStyle = color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = color;
         ctx.fill();
         ctx.shadowBlur = 0;
       }
@@ -138,48 +245,67 @@
       stars.push(new Star());
     }
 
+    function drawBackground() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const radius = Math.max(canvas.width, canvas.height);
+
+      const centerColor = `hsla(${globalHue}, 100%, 25%, 0.35)`;
+      const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+      gradient.addColorStop(0, centerColor);
+      gradient.addColorStop(0.4, 'rgba(0, 0, 0, 0.2)');
+      gradient.addColorStop(0.8, 'rgba(0, 0, 0, 0.6)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
     function drawLines() {
+      const prevOp = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.shadowBlur = 0;
+
       for (let i = 0; i < stars.length; i++) {
         for (let j = i + 1; j < stars.length; j++) {
           const dx = stars[i].x - stars[j].x;
           const dy = stars[i].y - stars[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          const key = `${i}-${j}`;
+          const id = `${i}-${j}`;
 
-          if (!connections[key]) {
-            connections[key] = { alpha: 0 };
+          let targetAlpha = 0;
+          if (dist < MAX_DISTANCE) {
+            targetAlpha = 0.25 - dist / MAX_DISTANCE * 0.25;
           }
 
-          const conn = connections[key];
-          const targetAlpha = dist < MAX_DISTANCE ? 0.4 - (dist / MAX_DISTANCE * 0.4) : 0;
+          let currentAlpha = lineAlphas.get(id) || 0;
+          currentAlpha += (targetAlpha - currentAlpha) * 0.05;
+          lineAlphas.set(id, currentAlpha);
 
-          if (conn.alpha < targetAlpha) {
-            conn.alpha += 0.01;
-            if (conn.alpha > targetAlpha) conn.alpha = targetAlpha;
-          } else {
-            conn.alpha -= 0.01;
-            if (conn.alpha < 0) conn.alpha = 0;
-          }
-
-          if (conn.alpha > 0) {
+          if (currentAlpha > 0.005) {
+            const color = `hsla(${globalHue}, 100%, 75%, ${currentAlpha})`;
             ctx.beginPath();
             ctx.moveTo(stars[i].x, stars[i].y);
             ctx.lineTo(stars[j].x, stars[j].y);
-            ctx.strokeStyle = `rgba(0, 0, 139, ${conn.alpha})`;
-            ctx.lineWidth = 0.6;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
       }
+
+      ctx.globalCompositeOperation = prevOp;
     }
 
     function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBackground();
       stars.forEach(star => {
         star.update();
         star.draw();
       });
       drawLines();
+      globalHue = (globalHue + 0.05) % 360;
       requestAnimationFrame(animate);
     }
 
@@ -188,7 +314,28 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      stars.length = 0;
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push(new Star());
+      }
     });
+
+    function toggleOverlay(show) {
+      const overlay = document.getElementById('instructionOverlay');
+      const modal = overlay.querySelector('.modal');
+      if (show) {
+        overlay.classList.add('active');
+        modal.style.transform = 'scale(1)';
+        modal.style.opacity = '1';
+      } else {
+        modal.style.transform = 'scale(0.7)';
+        modal.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.6s ease, backdrop-filter 0.6s ease';
+        setTimeout(() => {
+          overlay.classList.remove('active');
+        }, 600);
+      }
+    }
   </script>
 </body>
 </html>
